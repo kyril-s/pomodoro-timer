@@ -59,6 +59,15 @@
   --pmdr-leading-tight:  1.1;
   --pmdr-leading-normal: 1.5;
 
+  --pmdr-weight-normal:  400;
+  --pmdr-weight-medium:  500;
+  --pmdr-weight-semibold: 600;
+  --pmdr-weight-bold:    700;
+
+  --pmdr-tracking-tight:  -0.01em;
+  --pmdr-tracking-normal:  0;
+  --pmdr-tracking-wide:    0.05em;
+
   /* --- Border radius ---------------------------------------------- */
   --pmdr-radius-sm:   0.375rem;
   --pmdr-radius-md:   0.75rem;
@@ -102,4 +111,93 @@ body {
   justify-content: center;
   min-height: 100dvh;
   padding: var(--pmdr-space-md);
+}
+
+/* =================================================================
+   Timer Card
+   ================================================================= */
+
+.timer-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--pmdr-space-lg);
+  background-color: var(--pmdr-clr-surface-card);
+  padding: var(--pmdr-space-2xl) var(--pmdr-space-xl);
+  border-radius: var(--pmdr-radius-lg);
+}
+
+/* --- Mode indicator --------------------------------------------- */
+
+.timer-mode {
+  font-size: var(--pmdr-text-lg);
+  font-weight: var(--pmdr-weight-semibold);
+  letter-spacing: var(--pmdr-tracking-wide);
+  text-transform: uppercase;
+  color: var(--pmdr-clr-on-surface-work);
+}
+
+/* --- Time display ----------------------------------------------- */
+
+.timer-display {
+  font-family: var(--pmdr-font-mono);
+  font-size: var(--pmdr-text-timer);
+  font-weight: var(--pmdr-weight-bold);
+  letter-spacing: var(--pmdr-tracking-tight);
+  line-height: var(--pmdr-leading-tight);
+  color: var(--pmdr-clr-on-surface-text);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Controls --------------------------------------------------- */
+
+.timer-controls {
+  display: flex;
+  gap: var(--pmdr-space-md);
+}
+
+/* =================================================================
+   Buttons
+   ================================================================= */
+
+.btn {
+  font-family: inherit;
+  font-size: var(--pmdr-text-base);
+  font-weight: var(--pmdr-weight-semibold);
+  letter-spacing: var(--pmdr-tracking-wide);
+  line-height: 1;
+  padding: var(--pmdr-space-sm) var(--pmdr-space-xl);
+  border: 2px solid transparent;
+  border-radius: var(--pmdr-radius-full);
+  cursor: pointer;
+  transition:
+    background-color var(--pmdr-transition-fast),
+    border-color var(--pmdr-transition-fast),
+    box-shadow var(--pmdr-transition-fast);
+}
+
+.btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--pmdr-clr-on-surface-interactive-focus-ring);
+}
+
+.btn-primary {
+  background-color: var(--pmdr-clr-on-surface-work);
+  color: #fff;
+  border-color: var(--pmdr-clr-on-surface-work);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 0 12px var(--pmdr-clr-on-surface-work-glow);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--pmdr-clr-on-surface-text-secondary);
+  border-color: var(--pmdr-clr-on-surface-text-muted);
+}
+
+.btn-secondary:hover {
+  border-color: var(--pmdr-clr-on-surface-text-secondary);
+  color: var(--pmdr-clr-on-surface-text);
 }
