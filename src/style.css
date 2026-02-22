@@ -201,3 +201,20 @@ body {
   border-color: var(--pmdr-clr-on-surface-text-secondary);
   color: var(--pmdr-clr-on-surface-text);
 }
+
+/* =================================================================
+   Break-Mode Overrides
+   ================================================================= */
+
+[data-mode="break"] .timer-mode {
+  color: var(--pmdr-clr-on-surface-break);
+}
+
+[data-mode="break"] .btn-primary {
+  background-color: var(--pmdr-clr-on-surface-break);
+  border-color: var(--pmdr-clr-on-surface-break);
+}
+
+[data-mode="break"] .btn-primary:hover {
+  box-shadow: 0 0 12px var(--pmdr-clr-on-surface-break-glow);
+}
