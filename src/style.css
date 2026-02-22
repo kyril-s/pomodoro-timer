@@ -1,1 +1,105 @@
-/* We'll add our styles here */
+/* =================================================================
+   Design Tokens
+   
+   Theme strategy:
+   - `color-scheme: dark light` follows system preference, dark default
+   - `light-dark(light-val, dark-val)` resolves per computed color-scheme
+   - Manual toggle: set data-theme="light|dark" on <html>
+   ================================================================= */
+
+:root {
+  color-scheme: dark light;
+
+  /* --- Colors: backgrounds ---------------------------------------- */
+  --pmdr-clr-surface-page:             light-dark(#f0f1f5, #0f1023);
+  --pmdr-clr-surface-card:        light-dark(#ffffff, #1a1b3a);
+  --pmdr-clr-surface-raised: light-dark(#ffffff, #252750);
+
+  /* --- Colors: text ----------------------------------------------- */
+  --pmdr-clr-on-surface-text:           light-dark(#1a1b2e, #e8e8f0);
+  --pmdr-clr-on-surface-text-secondary: light-dark(#5d5f7e, #9394b0);
+  --pmdr-clr-on-surface-text-muted:     light-dark(#9394b0, #5d5f7e);
+
+  /* --- Colors: work mode (warm) ----------------------------------- */
+  --pmdr-clr-on-surface-work:           light-dark(#dc3545, #ff6b6b);
+  --pmdr-clr-on-surface-work-dim:       light-dark(#fde8ea, #3a1a22);
+  --pmdr-clr-on-surface-work-glow:      light-dark(rgba(220, 53, 69, 0.15),rgba(255, 107, 107, 0.25)); 
+
+  /* --- Colors: break mode (cool) ---------------------------------- */
+  --pmdr-clr-on-surface-break:          light-dark(#0d9488, #4ecdc4);
+  --pmdr-clr-on-surface-break-dim:      light-dark(#e6f7f5, #142e2b);
+  --pmdr-clr-on-surface-break-glow:     light-dark(rgba(13, 148, 136, 0.15),rgba(78, 205, 196, 0.25));
+
+  /* --- Colors: interactive ---------------------------------------- */
+  --pmdr-clr-on-surface-interactive-focus-ring:     light-dark(rgba(59, 130, 246, 0.5),rgba(99, 160, 255, 0.5));
+
+  /* --- Spacing scale ---------------------------------------------- */
+  --pmdr-space-xs:  0.25rem;
+  --pmdr-space-sm:  0.5rem;
+  --pmdr-space-md:  1rem;
+  --pmdr-space-lg:  1.5rem;
+  --pmdr-space-xl:  2.5rem;
+  --pmdr-space-2xl: 4rem;
+
+  /* --- Typography ------------------------------------------------- */
+  --pmdr-font-body: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+               Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
+               'Helvetica Neue', sans-serif;
+  --pmdr-font-mono: 'SF Mono', ui-monospace, 'Cascadia Code', 'Fira Code',
+               Menlo, Monaco, Consolas, monospace;
+
+  --pmdr-text-xs:    0.75rem;
+  --pmdr-text-sm:    0.875rem;
+  --pmdr-text-base:  1rem;
+  --pmdr-text-lg:    1.25rem;
+  --pmdr-text-xl:    1.5rem;
+  --pmdr-text-2xl:   2rem;
+  --pmdr-text-timer: clamp(3.5rem, 14vw, 7rem);
+
+  --pmdr-leading-tight:  1.1;
+  --pmdr-leading-normal: 1.5;
+
+  /* --- Border radius ---------------------------------------------- */
+  --pmdr-radius-sm:   0.375rem;
+  --pmdr-radius-md:   0.75rem;
+  --pmdr-radius-lg:   1rem;
+  --pmdr-radius-full: 9999px;
+
+  /* --- Transitions ------------------------------------------------ */
+  --pmdr-transition-fast: 150ms ease;
+  --pmdr-transition-base: 250ms ease;
+}
+
+/* Manual theme overrides — set data-theme on <html> to force a mode */
+[data-theme="light"] { color-scheme: light; }
+[data-theme="dark"]  { color-scheme: dark; }
+
+/* =================================================================
+   Base Styles
+   ================================================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--pmdr-font-body);
+  font-size: var(--pmdr-text-base);
+  line-height: var(--pmdr-leading-normal);
+  color: var(--pmdr-clr-on-surface-text);
+  background-color: var(--pmdr-clr-surface-page);
+  min-height: 100dvh;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  padding: var(--pmdr-space-md);
+}
