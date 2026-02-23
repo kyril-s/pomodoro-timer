@@ -33,6 +33,10 @@
   /* --- Colors: interactive ---------------------------------------- */
   --pmdr-clr-on-surface-interactive-focus-ring:     light-dark(rgba(59, 130, 246, 0.5),rgba(99, 160, 255, 0.5));
 
+  /* --- Focus ring ------------------------------------------------- */
+  --pmdr-focus-ring-width:  3px;
+  --pmdr-focus-ring-offset: 2px;
+
   /* --- Spacing scale ---------------------------------------------- */
   --pmdr-space-xs:  0.25rem;
   --pmdr-space-sm:  0.5rem;
@@ -180,8 +184,8 @@ body {
 }
 
 .btn:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px var(--pmdr-clr-on-surface-interactive-focus-ring);
+  outline: var(--pmdr-focus-ring-width) solid var(--pmdr-clr-on-surface-interactive-focus-ring);
+  outline-offset: var(--pmdr-focus-ring-offset);
 }
 
 .btn-primary {
@@ -268,8 +272,8 @@ body {
 }
 
 .settings-toggle:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px var(--pmdr-clr-on-surface-interactive-focus-ring);
+  outline: var(--pmdr-focus-ring-width) solid var(--pmdr-clr-on-surface-interactive-focus-ring);
+  outline-offset: var(--pmdr-focus-ring-offset);
 }
 
 .settings-icon {
@@ -313,10 +317,10 @@ body {
   transition: border-color var(--pmdr-transition-fast);
 }
 
-.settings-input:focus {
-  outline: none;
+.settings-input:focus-visible {
   border-color: var(--pmdr-clr-on-surface-work);
-  box-shadow: 0 0 0 3px var(--pmdr-clr-on-surface-interactive-focus-ring);
+  outline: var(--pmdr-focus-ring-width) solid var(--pmdr-clr-on-surface-interactive-focus-ring);
+  outline-offset: var(--pmdr-focus-ring-offset);
 }
 
 .settings-unit {
