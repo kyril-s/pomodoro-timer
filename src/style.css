@@ -203,6 +203,122 @@ body {
 }
 
 /* =================================================================
+   Settings Panel (top expandable bar)
+   ================================================================= */
+
+.settings-panel {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  background-color: var(--pmdr-clr-surface-card);
+}
+
+.settings-body {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: var(--pmdr-space-md) var(--pmdr-space-lg);
+}
+
+.settings-fields {
+  display: flex;
+  align-items: center;
+  gap: var(--pmdr-space-lg);
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  margin-right: auto;
+  transition:
+    max-height 0.3s ease,
+    opacity 0.2s ease;
+}
+
+.settings-panel.open .settings-fields {
+  max-height: 3rem;
+  opacity: 1;
+}
+
+.settings-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: none;
+  border-radius: var(--pmdr-radius-sm);
+  background: transparent;
+  cursor: pointer;
+  color: var(--pmdr-clr-on-surface-text-secondary);
+  transition:
+    color var(--pmdr-transition-fast),
+    background-color var(--pmdr-transition-fast);
+}
+
+.settings-toggle:hover {
+  color: var(--pmdr-clr-on-surface-text);
+  background-color: var(--pmdr-clr-surface-raised);
+}
+
+.settings-toggle:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--pmdr-clr-on-surface-interactive-focus-ring);
+}
+
+.settings-icon {
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.settings-panel.open .settings-icon {
+  transform: rotate(45deg);
+}
+
+.settings-field {
+  display: flex;
+  align-items: center;
+  gap: var(--pmdr-space-sm);
+}
+
+.settings-label {
+  font-size: var(--pmdr-text-sm);
+  font-weight: var(--pmdr-weight-medium);
+  color: var(--pmdr-clr-on-surface-text-secondary);
+}
+
+.settings-input-group {
+  display: flex;
+  align-items: center;
+  gap: var(--pmdr-space-xs);
+}
+
+.settings-input {
+  width: 3.5rem;
+  padding: var(--pmdr-space-xs) var(--pmdr-space-sm);
+  font-family: var(--pmdr-font-mono);
+  font-size: var(--pmdr-text-sm);
+  font-weight: var(--pmdr-weight-medium);
+  color: var(--pmdr-clr-on-surface-text);
+  background-color: var(--pmdr-clr-surface-raised);
+  border: 2px solid var(--pmdr-clr-on-surface-text-muted);
+  border-radius: var(--pmdr-radius-sm);
+  text-align: center;
+  transition: border-color var(--pmdr-transition-fast);
+}
+
+.settings-input:focus {
+  outline: none;
+  border-color: var(--pmdr-clr-on-surface-work);
+  box-shadow: 0 0 0 3px var(--pmdr-clr-on-surface-interactive-focus-ring);
+}
+
+.settings-unit {
+  font-size: var(--pmdr-text-xs);
+  color: var(--pmdr-clr-on-surface-text-muted);
+}
+
+/* =================================================================
    Break-Mode Overrides
    ================================================================= */
 

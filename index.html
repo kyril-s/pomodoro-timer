@@ -7,6 +7,33 @@
     <link rel="stylesheet" href="/src/style.css">
 </head>
 <body>
+    <div class="settings-panel">
+        <div class="settings-body">
+            <div class="settings-fields">
+                <label class="settings-field">
+                    <span class="settings-label">Work</span>
+                    <div class="settings-input-group">
+                        <input id="work-duration" type="number" class="settings-input" min="1" max="120" value="25">
+                        <span class="settings-unit">min</span>
+                    </div>
+                </label>
+                <label class="settings-field">
+                    <span class="settings-label">Break</span>
+                    <div class="settings-input-group">
+                        <input id="break-duration" type="number" class="settings-input" min="1" max="60" value="5">
+                        <span class="settings-unit">min</span>
+                    </div>
+                </label>
+            </div>
+            <button id="settings-toggle-btn" class="settings-toggle" aria-label="Toggle settings">
+                <svg class="settings-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
     <div id="app">
         <div class="timer-card">
             <p id="mode-label" class="timer-mode">Work</p>
