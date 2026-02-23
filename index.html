@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,7 +26,7 @@
                         </div>
                     </label>
                 </div>
-                <span>Shortcuts</span>
+                <span class="settings-label">Shortcuts</span>
                 <div class="settings-row shortcuts-row">
                     <span class="settings-label">Work</span>
                     <div class="shortcut-group">
@@ -43,6 +43,12 @@
                         <button type="button" class="btn-shortcut" data-target="break" data-minutes="5">5m</button>
                         <button type="button" class="btn-shortcut" data-target="break" data-minutes="15">15m</button>
                     </div>
+                </div>
+                <div class="settings-row">
+                    <label class="settings-field settings-field-hue">
+                        <span class="settings-label">Theme color</span>
+                        <input id="theme-hue" type="range" min="0" max="360" value="239" class="settings-hue-slider">
+                    </label>
                 </div>
             </fieldset>
             <button id="settings-toggle-btn" class="settings-toggle" aria-label="Toggle settings">

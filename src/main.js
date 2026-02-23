@@ -5,6 +5,8 @@ let timeRemaining = workSeconds;
 let isRunning = false;
 let currentMode = "work";
 let intervalId = null;
+let audioCtx;
+let currentHue = 239;
 
 const app = document.getElementById("app");
 const timeDisplay = document.getElementById("time-display");
@@ -17,8 +19,78 @@ const breakDurationInput = document.getElementById("break-duration");
 const settingsPanel = document.querySelector(".settings-panel");
 const settingsToggleBtn = document.getElementById("settings-toggle-btn");
 const settingsFieldset = document.getElementById("settings-fieldset");
+const themeHueInput = document.getElementById("theme-hue");
 
-let audioCtx;
+/* ---- Dynamic color system ---------------------------------------- */
+
+function hsl(h, s, l) {
+  return `hsl(${h} ${s}% ${l}%)`;
+}
+
+function hsla(h, s, l, a) {
+  return `hsl(${h} ${s}% ${l}% / ${a})`;
+}
+
+function applyColors(isDark) {
+  const h = currentHue;
+  const root = document.documentElement.style;
+
+  const workS = 65;
+  const breakH = (h + 150) % 360;
+  const breakS = 55;
+
+  if (isDark) {
+    root.setProperty("--pmdr-clr-surface-page", hsl(h, 30, 6));
+    root.setProperty("--pmdr-clr-surface-card", hsl(h, 30, 12));
+    root.setProperty("--pmdr-clr-surface-raised", hsl(h, 28, 18));
+
+    root.setProperty("--pmdr-clr-on-surface-text", hsl(h, 12, 92));
+    root.setProperty("--pmdr-clr-on-surface-text-secondary", hsl(h, 12, 63));
+    root.setProperty("--pmdr-clr-on-surface-text-muted", hsl(h, 10, 43));
+
+    root.setProperty("--pmdr-clr-on-surface-work", hsl(h, workS, 68));
+    root.setProperty("--pmdr-clr-on-surface-work-dim", hsl(h, 35, 15));
+    root.setProperty("--pmdr-clr-on-surface-work-glow", hsla(h, workS, 68, 0.25));
+
+    root.setProperty("--pmdr-clr-on-surface-break", hsl(breakH, breakS, 68));
+    root.setProperty("--pmdr-clr-on-surface-break-dim", hsl(breakH, 30, 14));
+    root.setProperty("--pmdr-clr-on-surface-break-glow", hsla(breakH, breakS, 68, 0.25));
+
+    root.setProperty("--pmdr-clr-action-primary", "#f0f0f0");
+    root.setProperty("--pmdr-clr-action-primary-text", "#111111");
+
+    root.setProperty("--pmdr-clr-on-surface-interactive-focus-ring", hsla(h, 60, 70, 0.5));
+  } else {
+    root.setProperty("--pmdr-clr-surface-page", hsl(h, 8, 93));
+    root.setProperty("--pmdr-clr-surface-card", hsl(h, 8, 96));
+    root.setProperty("--pmdr-clr-surface-raised", hsl(h, 6, 91));
+
+    root.setProperty("--pmdr-clr-on-surface-text", hsl(h, 20, 14));
+    root.setProperty("--pmdr-clr-on-surface-text-secondary", hsl(h, 14, 43));
+    root.setProperty("--pmdr-clr-on-surface-text-muted", hsl(h, 10, 63));
+
+    root.setProperty("--pmdr-clr-on-surface-work", hsl(h, workS, 42));
+    root.setProperty("--pmdr-clr-on-surface-work-dim", hsl(h, 40, 95));
+    root.setProperty("--pmdr-clr-on-surface-work-glow", hsla(h, workS, 42, 0.15));
+
+    root.setProperty("--pmdr-clr-on-surface-break", hsl(breakH, breakS, 35));
+    root.setProperty("--pmdr-clr-on-surface-break-dim", hsl(breakH, 35, 95));
+    root.setProperty("--pmdr-clr-on-surface-break-glow", hsla(breakH, breakS, 35, 0.15));
+
+    root.setProperty("--pmdr-clr-action-primary", "#1a1a1a");
+    root.setProperty("--pmdr-clr-action-primary-text", "#ffffff");
+
+    root.setProperty("--pmdr-clr-on-surface-interactive-focus-ring", hsla(h, 70, 60, 0.5));
+  }
+}
+
+function applyTheme() {
+  const isDark = isRunning && currentMode === "work";
+  document.documentElement.dataset.theme = isDark ? "dark" : "light";
+  applyColors(isDark);
+}
+
+/* ---- Audio -------------------------------------------------------- */
 
 function playNotification(frequency, count) {
   if (!audioCtx) {
@@ -43,6 +115,8 @@ function playNotification(frequency, count) {
   }
 }
 
+/* ---- Display & timer core ---------------------------------------- */
+
 function updateDisplay() {
   const minutes = Math.floor(timeRemaining / 60);
   const seconds = timeRemaining % 60;
@@ -52,6 +126,7 @@ function updateDisplay() {
   modeWorkBtn.classList.toggle("active", currentMode === "work");
   modeBreakBtn.classList.toggle("active", currentMode === "break");
   app.dataset.mode = currentMode;
+  applyTheme();
 }
 
 function tick() {
@@ -73,35 +148,46 @@ function tick() {
   updateDisplay();
 }
 
-function lockSettings(locked) {
-  settingsFieldset.disabled = locked;
-  settingsFieldset.title = locked ? "Pause the timer to edit" : "";
+/* ---- Timer controls ----------------------------------------------- */
+
+function stopTimer() {
+  clearInterval(intervalId);
+  intervalId = null;
+  isRunning = false;
+  startPauseBtn.textContent = "Start";
+  settingsFieldset.disabled = false;
+  settingsFieldset.title = "";
 }
 
 function startPause() {
   if (isRunning) {
-    clearInterval(intervalId);
-    intervalId = null;
-    startPauseBtn.textContent = "Start";
-    lockSettings(false);
+    stopTimer();
   } else {
     intervalId = setInterval(tick, 1000);
+    isRunning = true;
     startPauseBtn.textContent = "Pause";
-    lockSettings(true);
+    settingsFieldset.disabled = true;
+    settingsFieldset.title = "Pause the timer to edit";
   }
-  isRunning = !isRunning;
+  applyTheme();
 }
 
 function reset() {
-  clearInterval(intervalId);
-  intervalId = null;
-  isRunning = false;
+  stopTimer();
   currentMode = "work";
   timeRemaining = workSeconds;
-  startPauseBtn.textContent = "Start";
-  lockSettings(false);
   updateDisplay();
 }
+
+function switchMode(newMode) {
+  if (newMode === currentMode) return;
+  stopTimer();
+  currentMode = newMode;
+  timeRemaining = currentMode === "work" ? workSeconds : breakSeconds;
+  updateDisplay();
+}
+
+/* ---- Settings ----------------------------------------------------- */
 
 function applySettings() {
   const workMin = Math.max(1, Math.min(120, Number(workDurationInput.value) || 25));
@@ -140,17 +226,11 @@ function handleShortcut(e) {
   updateDisplay();
 }
 
-function switchMode(newMode) {
-  if (newMode === currentMode) return;
-  clearInterval(intervalId);
-  intervalId = null;
-  isRunning = false;
-  startPauseBtn.textContent = "Start";
-  lockSettings(false);
-  currentMode = newMode;
-  timeRemaining = currentMode === "work" ? workSeconds : breakSeconds;
-  updateDisplay();
-}
+/* ---- Event listeners ---------------------------------------------- */
+
+document.body.addEventListener("animationend", () => {
+  document.body.classList.remove("flash-work", "flash-break");
+});
 
 settingsToggleBtn.addEventListener("click", () => settingsPanel.classList.toggle("open"));
 settingsFieldset.addEventListener("click", handleShortcut);
@@ -162,5 +242,12 @@ startPauseBtn.addEventListener("click", startPause);
 resetBtn.addEventListener("click", reset);
 workDurationInput.addEventListener("change", applySettings);
 breakDurationInput.addEventListener("change", applySettings);
+themeHueInput.addEventListener("input", () => {
+  currentHue = Number(themeHueInput.value);
+  applyTheme();
+});
 
+/* ---- Init --------------------------------------------------------- */
+
+currentHue = Number(themeHueInput.value);
 updateDisplay();

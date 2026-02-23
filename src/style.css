@@ -2,36 +2,33 @@
    Design Tokens
    
    Theme strategy:
-   - `color-scheme: dark light` follows system preference, dark default
-   - `light-dark(light-val, dark-val)` resolves per computed color-scheme
-   - Manual toggle: set data-theme="light|dark" on <html>
+   - Light by default; dark activates when work timer is running
+   - JS sets data-theme on <html> and writes every color token
+     directly via setProperty — no CSS nesting required
    ================================================================= */
 
 :root {
-  color-scheme: dark light;
+  /* --- Colors (all overridden by JS, these are fallbacks) --------- */
+  --pmdr-clr-surface-page:   #edeef3;
+  --pmdr-clr-surface-card:   #f5f5f8;
+  --pmdr-clr-surface-raised: #eaebed;
 
-  /* --- Colors: backgrounds ---------------------------------------- */
-  --pmdr-clr-surface-page:        light-dark(#f0f1f5, #0f1023);
-  --pmdr-clr-surface-card:        light-dark(#ffffff, #1a1b3a);
-  --pmdr-clr-surface-raised:      light-dark(#fafafa, #252750);
+  --pmdr-clr-on-surface-text:           #1a1b2e;
+  --pmdr-clr-on-surface-text-secondary: #5d5f7e;
+  --pmdr-clr-on-surface-text-muted:     #9394b0;
 
-  /* --- Colors: text ----------------------------------------------- */
-  --pmdr-clr-on-surface-text:           light-dark(#1a1b2e, #e8e8f0);
-  --pmdr-clr-on-surface-text-secondary: light-dark(#5d5f7e, #9394b0);
-  --pmdr-clr-on-surface-text-muted:     light-dark(#9394b0, #5d5f7e);
+  --pmdr-clr-on-surface-work:      #dc3545;
+  --pmdr-clr-on-surface-work-dim:  #fde8ea;
+  --pmdr-clr-on-surface-work-glow: rgba(220,53,69,.15);
 
-  /* --- Colors: work mode (warm) ----------------------------------- */
-  --pmdr-clr-on-surface-work:           light-dark(#dc3545, #ff6b6b);
-  --pmdr-clr-on-surface-work-dim:       light-dark(#fde8ea, #3a1a22);
-  --pmdr-clr-on-surface-work-glow:      light-dark(rgba(220, 53, 69, 0.15),rgba(255, 107, 107, 0.25)); 
+  --pmdr-clr-on-surface-break:      #0d9488;
+  --pmdr-clr-on-surface-break-dim:  #e6f7f5;
+  --pmdr-clr-on-surface-break-glow: rgba(13,148,136,.15);
 
-  /* --- Colors: break mode (cool) ---------------------------------- */
-  --pmdr-clr-on-surface-break:          light-dark(#0d9488, #4ecdc4);
-  --pmdr-clr-on-surface-break-dim:      light-dark(#e6f7f5, #142e2b);
-  --pmdr-clr-on-surface-break-glow:     light-dark(rgba(13, 148, 136, 0.15),rgba(78, 205, 196, 0.25));
+  --pmdr-clr-action-primary:      #1a1a1a;
+  --pmdr-clr-action-primary-text: #ffffff;
 
-  /* --- Colors: interactive ---------------------------------------- */
-  --pmdr-clr-on-surface-interactive-focus-ring:     light-dark(rgba(59, 130, 246, 0.5),rgba(99, 160, 255, 0.5));
+  --pmdr-clr-on-surface-interactive-focus-ring: rgba(59,130,246,.5);
 
   /* --- Focus ring ------------------------------------------------- */
   --pmdr-focus-ring-width:  3px;
@@ -86,10 +83,6 @@
   --pmdr-opacity-disabled: 0.4;
 }
 
-/* Manual theme overrides — set data-theme on <html> to force a mode */
-[data-theme="light"] { color-scheme: light; }
-[data-theme="dark"]  { color-scheme: dark; }
-
 /* =================================================================
    Base Styles
    ================================================================= */
@@ -109,6 +102,7 @@ body {
   color: var(--pmdr-clr-on-surface-text);
   background-color: var(--pmdr-clr-surface-page);
   min-height: 100dvh;
+  transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 #app {
@@ -134,6 +128,7 @@ body {
   background-color: var(--pmdr-clr-surface-card);
   padding: var(--pmdr-space-2xl) var(--pmdr-space-xl);
   border-radius: var(--pmdr-radius-lg);
+  transition: background-color 0.4s ease;
 }
 
 /* --- Mode toggle ----------------------------------------------- */
@@ -237,13 +232,13 @@ body {
 }
 
 .btn-primary {
-  background-color: var(--pmdr-clr-on-surface-work);
-  color: #fff;
-  border-color: var(--pmdr-clr-on-surface-work);
+  background-color: var(--pmdr-clr-action-primary);
+  color: var(--pmdr-clr-action-primary-text);
+  border-color: var(--pmdr-clr-action-primary);
 }
 
 .btn-primary:hover {
-  box-shadow: 0 0 12px var(--pmdr-clr-on-surface-work-glow);
+  opacity: 0.85;
 }
 
 .btn-secondary {
@@ -266,6 +261,7 @@ body {
   top: 0;
   width: 100%;
   background-color: var(--pmdr-clr-surface-card);
+  transition: background-color 0.4s ease;
 }
 
 .settings-body {
@@ -433,6 +429,71 @@ body {
   color: var(--pmdr-clr-on-surface-text-muted);
 }
 
+.settings-field-hue {
+  flex: 1;
+}
+
+.settings-hue-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  flex: 1;
+  height: 0.5rem;
+  border-radius: var(--pmdr-radius-full);
+  background: linear-gradient(to right,
+    hsl(0   100% 50%),
+    hsl(60  100% 50%),
+    hsl(120 100% 50%),
+    hsl(180 100% 50%),
+    hsl(240 100% 50%),
+    hsl(300 100% 50%),
+    hsl(360 100% 50%)
+  );
+  cursor: pointer;
+  outline: none;
+}
+
+.settings-hue-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: var(--pmdr-radius-full);
+  background: #fff;
+  border: 2px solid var(--pmdr-clr-on-surface-text-muted);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: border-color var(--pmdr-transition-fast),
+              box-shadow var(--pmdr-transition-fast);
+}
+
+.settings-hue-slider::-moz-range-thumb {
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: var(--pmdr-radius-full);
+  background: #fff;
+  border: 2px solid var(--pmdr-clr-on-surface-text-muted);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: border-color var(--pmdr-transition-fast),
+              box-shadow var(--pmdr-transition-fast);
+}
+
+.settings-hue-slider:hover::-webkit-slider-thumb {
+  border-color: var(--pmdr-clr-on-surface-text-secondary);
+}
+
+.settings-hue-slider:hover::-moz-range-thumb {
+  border-color: var(--pmdr-clr-on-surface-text-secondary);
+}
+
+.settings-hue-slider:focus-visible::-webkit-slider-thumb {
+  outline: var(--pmdr-focus-ring-width) solid var(--pmdr-clr-on-surface-interactive-focus-ring);
+  outline-offset: var(--pmdr-focus-ring-offset);
+}
+
+.settings-hue-slider:focus-visible::-moz-range-thumb {
+  outline: var(--pmdr-focus-ring-width) solid var(--pmdr-clr-on-surface-interactive-focus-ring);
+  outline-offset: var(--pmdr-focus-ring-offset);
+}
+
 .settings-panel.open .settings-fields:disabled {
   opacity: var(--pmdr-opacity-disabled);
   cursor: not-allowed;
@@ -459,19 +520,3 @@ body {
 body.flash-work  { animation: flash-work 0.6s ease-out; }
 body.flash-break { animation: flash-break 0.6s ease-out; }
 
-/* =================================================================
-   Break-Mode Overrides
-   ================================================================= */
-
-[data-mode="break"] .timer-mode {
-  color: var(--pmdr-clr-on-surface-break);
-}
-
-[data-mode="break"] .btn-primary {
-  background-color: var(--pmdr-clr-on-surface-break);
-  border-color: var(--pmdr-clr-on-surface-break);
-}
-
-[data-mode="break"] .btn-primary:hover {
-  box-shadow: 0 0 12px var(--pmdr-clr-on-surface-break-glow);
-}
