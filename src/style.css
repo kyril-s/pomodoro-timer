@@ -124,9 +124,9 @@ body {
   align-items: center;
   gap: var(--pmdr-space-lg);
   width: 100%;
-  max-width: 28rem;
+  max-width: 35rem;
   background-color: var(--pmdr-clr-surface-card);
-  padding: var(--pmdr-space-2xl) var(--pmdr-space-xl);
+  padding: var(--pmdr-space-lg) var(--pmdr-space-lg);
   border-radius: var(--pmdr-radius-lg);
   transition: background-color 0.4s ease;
 }
@@ -143,7 +143,7 @@ body {
 
 .mode-toggle-btn {
   font-family: inherit;
-  font-size: var(--pmdr-text-sm);
+  font-size: var(--pmdr-text-xs);
   font-weight: var(--pmdr-weight-semibold);
   letter-spacing: var(--pmdr-tracking-wide);
   text-transform: uppercase;
@@ -174,7 +174,8 @@ body {
   color: #fff;
 }
 
-#mode-break-btn.active {
+#mode-break-btn.active,
+#mode-long-break-btn.active {
   background-color: var(--pmdr-clr-on-surface-break);
   color: #fff;
 }
@@ -292,7 +293,7 @@ body {
 }
 
 .settings-panel.open .settings-fields {
-  max-height: 20rem;
+  max-height: 30rem;
   opacity: 1;
 }
 
@@ -340,7 +341,8 @@ body {
   color: var(--pmdr-clr-on-surface-work);
 }
 
-.btn-shortcut[data-target="break"]:hover {
+.btn-shortcut[data-target="break"]:hover,
+.btn-shortcut[data-target="longBreak"]:hover {
   border-color: var(--pmdr-clr-on-surface-break);
   color: var(--pmdr-clr-on-surface-break);
 }

@@ -1,5 +1,8 @@
 let workSeconds = 25 * 60;
 let breakSeconds = 5 * 60;
+let longBreakSeconds = 25 * 60;
+let longBreakInterval = 2;
+let completedWorkSessions = 0;
 
 let timeRemaining = workSeconds;
 let isRunning = false;
@@ -14,8 +17,11 @@ const startPauseBtn = document.getElementById("start-pause-btn");
 const resetBtn = document.getElementById("reset-btn");
 const modeWorkBtn = document.getElementById("mode-work-btn");
 const modeBreakBtn = document.getElementById("mode-break-btn");
+const modeLongBreakBtn = document.getElementById("mode-long-break-btn");
 const workDurationInput = document.getElementById("work-duration");
 const breakDurationInput = document.getElementById("break-duration");
+const longBreakDurationInput = document.getElementById("long-break-duration");
+const longBreakIntervalInput = document.getElementById("long-break-interval");
 const settingsPanel = document.querySelector(".settings-panel");
 const settingsToggleBtn = document.getElementById("settings-toggle-btn");
 const settingsFieldset = document.getElementById("settings-fieldset");
@@ -117,6 +123,12 @@ function playNotification(frequency, count) {
 
 /* ---- Display & timer core ---------------------------------------- */
 
+function secondsForMode(mode) {
+  if (mode === "work") return workSeconds;
+  if (mode === "longBreak") return longBreakSeconds;
+  return breakSeconds;
+}
+
 function updateDisplay() {
   const minutes = Math.floor(timeRemaining / 60);
   const seconds = timeRemaining % 60;
@@ -125,6 +137,7 @@ function updateDisplay() {
 
   modeWorkBtn.classList.toggle("active", currentMode === "work");
   modeBreakBtn.classList.toggle("active", currentMode === "break");
+  modeLongBreakBtn.classList.toggle("active", currentMode === "longBreak");
   app.dataset.mode = currentMode;
   applyTheme();
 }
@@ -134,8 +147,18 @@ function tick() {
 
   if (timeRemaining < 0) {
     const wasWork = currentMode === "work";
-    currentMode = wasWork ? "break" : "work";
-    timeRemaining = currentMode === "work" ? workSeconds : breakSeconds;
+
+    if (wasWork) {
+      completedWorkSessions++;
+      const useLongBreak =
+        longBreakInterval > 0 &&
+        completedWorkSessions % longBreakInterval === 0;
+      currentMode = useLongBreak ? "longBreak" : "break";
+      timeRemaining = useLongBreak ? longBreakSeconds : breakSeconds;
+    } else {
+      currentMode = "work";
+      timeRemaining = workSeconds;
+    }
 
     playNotification(wasWork ? 880 : 660, wasWork ? 3 : 2);
 
@@ -175,6 +198,7 @@ function startPause() {
 function reset() {
   stopTimer();
   currentMode = "work";
+  completedWorkSessions = 0;
   timeRemaining = workSeconds;
   updateDisplay();
 }
@@ -183,7 +207,7 @@ function switchMode(newMode) {
   if (newMode === currentMode) return;
   stopTimer();
   currentMode = newMode;
-  timeRemaining = currentMode === "work" ? workSeconds : breakSeconds;
+  timeRemaining = secondsForMode(currentMode);
   updateDisplay();
 }
 
@@ -192,12 +216,16 @@ function switchMode(newMode) {
 function applySettings() {
   const workMin = Math.max(1, Math.min(120, Number(workDurationInput.value) || 25));
   const breakMin = Math.max(1, Math.min(60, Number(breakDurationInput.value) || 5));
+  const longBreakMin = Math.max(1, Math.min(120, Number(longBreakDurationInput.value) || 25));
+  const interval = Math.max(0, Math.min(20, Number(longBreakIntervalInput.value) || 0));
 
   workSeconds = workMin * 60;
   breakSeconds = breakMin * 60;
+  longBreakSeconds = longBreakMin * 60;
+  longBreakInterval = interval;
 
   if (!isRunning) {
-    timeRemaining = currentMode === "work" ? workSeconds : breakSeconds;
+    timeRemaining = secondsForMode(currentMode);
     updateDisplay();
   }
 }
@@ -214,6 +242,12 @@ function handleShortcut(e) {
     workSeconds = minutes * 60;
     if (!isRunning && currentMode === "work") {
       timeRemaining = workSeconds;
+    }
+  } else if (target === "longBreak") {
+    longBreakDurationInput.value = minutes;
+    longBreakSeconds = minutes * 60;
+    if (!isRunning && currentMode === "longBreak") {
+      timeRemaining = longBreakSeconds;
     }
   } else {
     breakDurationInput.value = minutes;
@@ -237,11 +271,14 @@ settingsFieldset.addEventListener("click", handleShortcut);
 
 modeWorkBtn.addEventListener("click", () => switchMode("work"));
 modeBreakBtn.addEventListener("click", () => switchMode("break"));
+modeLongBreakBtn.addEventListener("click", () => switchMode("longBreak"));
 
 startPauseBtn.addEventListener("click", startPause);
 resetBtn.addEventListener("click", reset);
 workDurationInput.addEventListener("change", applySettings);
 breakDurationInput.addEventListener("change", applySettings);
+longBreakDurationInput.addEventListener("change", applySettings);
+longBreakIntervalInput.addEventListener("change", applySettings);
 themeHueInput.addEventListener("input", () => {
   currentHue = Number(themeHueInput.value);
   applyTheme();

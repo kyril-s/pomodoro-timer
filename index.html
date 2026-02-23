@@ -25,6 +25,22 @@
                             <span class="settings-unit">min</span>
                         </div>
                     </label>
+                    <label class="settings-field">
+                        <span class="settings-label">Long Break</span>
+                        <div class="settings-input-group">
+                            <input id="long-break-duration" type="number" class="settings-input" min="1" max="120" value="25">
+                            <span class="settings-unit">min</span>
+                        </div>
+                    </label>
+                </div>
+                <div class="settings-row">
+                    <label class="settings-field">
+                        <span class="settings-label">Long break every</span>
+                        <div class="settings-input-group">
+                            <input id="long-break-interval" type="number" class="settings-input" min="0" max="20" value="2">
+                            <span class="settings-unit">sessions</span>
+                        </div>
+                    </label>
                 </div>
                 <span class="settings-label">Shortcuts</span>
                 <div class="settings-row shortcuts-row">
@@ -42,6 +58,14 @@
                         <button type="button" class="btn-shortcut" data-target="break" data-minutes="2">2m</button>
                         <button type="button" class="btn-shortcut" data-target="break" data-minutes="5">5m</button>
                         <button type="button" class="btn-shortcut" data-target="break" data-minutes="15">15m</button>
+                    </div>
+                </div>
+                <div class="settings-row shortcuts-row">
+                    <span class="settings-label">Long</span>
+                    <div class="shortcut-group">
+                        <button type="button" class="btn-shortcut" data-target="longBreak" data-minutes="25">25m</button>
+                        <button type="button" class="btn-shortcut" data-target="longBreak" data-minutes="45">45m</button>
+                        <button type="button" class="btn-shortcut" data-target="longBreak" data-minutes="60">60m</button>
                     </div>
                 </div>
                 <div class="settings-row">
@@ -65,6 +89,7 @@
             <div class="mode-toggle">
                 <button id="mode-work-btn" type="button" class="mode-toggle-btn active">Work</button>
                 <button id="mode-break-btn" type="button" class="mode-toggle-btn">Break</button>
+                <button id="mode-long-break-btn" type="button" class="mode-toggle-btn">Long Break</button>
             </div>
             <p id="time-display" class="timer-display">25:00</p>
             <div class="timer-controls">
