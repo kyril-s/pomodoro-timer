@@ -129,6 +129,8 @@ body {
   flex-direction: column;
   align-items: center;
   gap: var(--pmdr-space-lg);
+  width: 100%;
+  max-width: 28rem;
   background-color: var(--pmdr-clr-surface-card);
   padding: var(--pmdr-space-2xl) var(--pmdr-space-xl);
   border-radius: var(--pmdr-radius-lg);
@@ -160,7 +162,15 @@ body {
 
 .timer-controls {
   display: flex;
+  flex-wrap: wrap;
   gap: var(--pmdr-space-md);
+  width: 100%;
+  justify-content: center;
+}
+
+.timer-controls .btn {
+  flex: 1 1 8rem;
+  text-align: center;
 }
 
 /* =================================================================
@@ -222,15 +232,18 @@ body {
 
 .settings-body {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
+  gap: var(--pmdr-space-sm);
   padding: var(--pmdr-space-md) var(--pmdr-space-lg);
 }
 
 .settings-fields {
   display: flex;
-  align-items: center;
-  gap: var(--pmdr-space-lg);
+  flex-direction: column;
+  gap: var(--pmdr-space-sm);
+  flex: 1 1 0%;
+  min-width: 0;
   overflow: hidden;
   max-height: 0;
   opacity: 0;
@@ -240,13 +253,67 @@ body {
   margin-top: 0;
   margin-bottom: 0;
   transition:
-    max-height 0.3s ease,
+    max-height 0.4s ease,
     opacity 0.2s ease;
 }
 
 .settings-panel.open .settings-fields {
-  max-height: 3rem;
+  max-height: 20rem;
   opacity: 1;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--pmdr-space-sm) var(--pmdr-space-md);
+}
+
+.shortcuts-row {
+  gap: var(--pmdr-space-sm);
+}
+
+.shortcut-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--pmdr-space-xs);
+}
+
+.btn-shortcut {
+  font-family: var(--pmdr-font-mono);
+  font-size: var(--pmdr-text-xs);
+  font-weight: var(--pmdr-weight-medium);
+  line-height: 1;
+  padding: var(--pmdr-space-xs) var(--pmdr-space-sm);
+  color: var(--pmdr-clr-on-surface-text-secondary);
+  background-color: var(--pmdr-clr-surface-raised);
+  border: 1px solid var(--pmdr-clr-on-surface-text-muted);
+  border-radius: var(--pmdr-radius-full);
+  cursor: pointer;
+  transition:
+    background-color var(--pmdr-transition-fast),
+    color var(--pmdr-transition-fast),
+    border-color var(--pmdr-transition-fast);
+}
+
+.btn-shortcut:hover {
+  color: var(--pmdr-clr-on-surface-text);
+  border-color: var(--pmdr-clr-on-surface-text-secondary);
+}
+
+.btn-shortcut[data-target="work"]:hover {
+  border-color: var(--pmdr-clr-on-surface-work);
+  color: var(--pmdr-clr-on-surface-work);
+}
+
+.btn-shortcut[data-target="break"]:hover {
+  border-color: var(--pmdr-clr-on-surface-break);
+  color: var(--pmdr-clr-on-surface-break);
+}
+
+.btn-shortcut:focus-visible {
+  outline: var(--pmdr-focus-ring-width) solid var(--pmdr-clr-on-surface-interactive-focus-ring);
+  outline-offset: var(--pmdr-focus-ring-offset);
 }
 
 .settings-toggle {

@@ -10,20 +10,40 @@
     <div class="settings-panel">
         <div class="settings-body">
             <fieldset id="settings-fieldset" class="settings-fields">
-                <label class="settings-field">
+                <div class="settings-row">
+                    <label class="settings-field">
+                        <span class="settings-label">Work</span>
+                        <div class="settings-input-group">
+                            <input id="work-duration" type="number" class="settings-input" min="1" max="120" value="25">
+                            <span class="settings-unit">min</span>
+                        </div>
+                    </label>
+                    <label class="settings-field">
+                        <span class="settings-label">Break</span>
+                        <div class="settings-input-group">
+                            <input id="break-duration" type="number" class="settings-input" min="1" max="60" value="5">
+                            <span class="settings-unit">min</span>
+                        </div>
+                    </label>
+                </div>
+                <span>Shortcuts</span>
+                <div class="settings-row shortcuts-row">
                     <span class="settings-label">Work</span>
-                    <div class="settings-input-group">
-                        <input id="work-duration" type="number" class="settings-input" min="1" max="120" value="25">
-                        <span class="settings-unit">min</span>
+                    <div class="shortcut-group">
+                        <button type="button" class="btn-shortcut" data-target="work" data-minutes="15">15m</button>
+                        <button type="button" class="btn-shortcut" data-target="work" data-minutes="25">25m</button>
+                        <button type="button" class="btn-shortcut" data-target="work" data-minutes="45">45m</button>
+                        <button type="button" class="btn-shortcut" data-target="work" data-minutes="60">60m</button>
                     </div>
-                </label>
-                <label class="settings-field">
+                </div>
+                <div class="settings-row shortcuts-row">
                     <span class="settings-label">Break</span>
-                    <div class="settings-input-group">
-                        <input id="break-duration" type="number" class="settings-input" min="1" max="60" value="5">
-                        <span class="settings-unit">min</span>
+                    <div class="shortcut-group">
+                        <button type="button" class="btn-shortcut" data-target="break" data-minutes="2">2m</button>
+                        <button type="button" class="btn-shortcut" data-target="break" data-minutes="5">5m</button>
+                        <button type="button" class="btn-shortcut" data-target="break" data-minutes="15">15m</button>
                     </div>
-                </label>
+                </div>
             </fieldset>
             <button id="settings-toggle-btn" class="settings-toggle" aria-label="Toggle settings">
                 <svg class="settings-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

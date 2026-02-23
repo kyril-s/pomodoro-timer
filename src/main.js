@@ -114,7 +114,32 @@ function applySettings() {
   }
 }
 
+function handleShortcut(e) {
+  const btn = e.target.closest(".btn-shortcut");
+  if (!btn || settingsFieldset.disabled) return;
+
+  const target = btn.dataset.target;
+  const minutes = Number(btn.dataset.minutes);
+
+  if (target === "work") {
+    workDurationInput.value = minutes;
+    workSeconds = minutes * 60;
+    if (!isRunning && currentMode === "work") {
+      timeRemaining = workSeconds;
+    }
+  } else {
+    breakDurationInput.value = minutes;
+    breakSeconds = minutes * 60;
+    if (!isRunning && currentMode === "break") {
+      timeRemaining = breakSeconds;
+    }
+  }
+
+  updateDisplay();
+}
+
 settingsToggleBtn.addEventListener("click", () => settingsPanel.classList.toggle("open"));
+settingsFieldset.addEventListener("click", handleShortcut);
 
 startPauseBtn.addEventListener("click", startPause);
 resetBtn.addEventListener("click", reset);
