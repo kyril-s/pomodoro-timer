@@ -77,6 +77,9 @@
   /* --- Transitions ------------------------------------------------ */
   --pmdr-transition-fast: 150ms ease;
   --pmdr-transition-base: 250ms ease;
+
+  /* --- Opacity ---------------------------------------------------- */
+  --pmdr-opacity-disabled: 0.4;
 }
 
 /* Manual theme overrides — set data-theme on <html> to force a mode */
@@ -207,7 +210,6 @@ body {
    ================================================================= */
 
 .settings-panel {
-  position: -webkit-sticky;
   position: sticky;
   top: 0;
   width: 100%;
@@ -229,6 +231,10 @@ body {
   max-height: 0;
   opacity: 0;
   margin-right: auto;
+  border: none;
+  padding: 0;
+  margin-top: 0;
+  margin-bottom: 0;
   transition:
     max-height 0.3s ease,
     opacity 0.2s ease;
@@ -317,6 +323,32 @@ body {
   font-size: var(--pmdr-text-xs);
   color: var(--pmdr-clr-on-surface-text-muted);
 }
+
+.settings-panel.open .settings-fields:disabled {
+  opacity: var(--pmdr-opacity-disabled);
+  cursor: not-allowed;
+}
+
+.settings-panel.open .settings-fields:disabled * {
+  cursor: not-allowed;
+}
+
+/* =================================================================
+   Mode-Switch Flash Animation
+   ================================================================= */
+
+@keyframes flash-work {
+  0%   { background-color: var(--pmdr-clr-on-surface-work); }
+  100% { background-color: var(--pmdr-clr-surface-page); }
+}
+
+@keyframes flash-break {
+  0%   { background-color: var(--pmdr-clr-on-surface-break); }
+  100% { background-color: var(--pmdr-clr-surface-page); }
+}
+
+body.flash-work  { animation: flash-work 0.6s ease-out; }
+body.flash-break { animation: flash-break 0.6s ease-out; }
 
 /* =================================================================
    Break-Mode Overrides
