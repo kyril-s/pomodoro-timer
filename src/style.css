@@ -11,9 +11,9 @@
   color-scheme: dark light;
 
   /* --- Colors: backgrounds ---------------------------------------- */
-  --pmdr-clr-surface-page:             light-dark(#f0f1f5, #0f1023);
+  --pmdr-clr-surface-page:        light-dark(#f0f1f5, #0f1023);
   --pmdr-clr-surface-card:        light-dark(#ffffff, #1a1b3a);
-  --pmdr-clr-surface-raised: light-dark(#ffffff, #252750);
+  --pmdr-clr-surface-raised:      light-dark(#fafafa, #252750);
 
   /* --- Colors: text ----------------------------------------------- */
   --pmdr-clr-on-surface-text:           light-dark(#1a1b2e, #e8e8f0);
@@ -136,14 +136,52 @@ body {
   border-radius: var(--pmdr-radius-lg);
 }
 
-/* --- Mode indicator --------------------------------------------- */
+/* --- Mode toggle ----------------------------------------------- */
 
-.timer-mode {
-  font-size: var(--pmdr-text-lg);
+.mode-toggle {
+  display: flex;
+  width: 100%;
+  background-color: var(--pmdr-clr-surface-raised);
+  border-radius: var(--pmdr-radius-full);
+  padding: var(--pmdr-space-xs);
+}
+
+.mode-toggle-btn {
+  font-family: inherit;
+  font-size: var(--pmdr-text-sm);
   font-weight: var(--pmdr-weight-semibold);
   letter-spacing: var(--pmdr-tracking-wide);
   text-transform: uppercase;
-  color: var(--pmdr-clr-on-surface-work);
+  line-height: 1;
+  width: 100%;
+  padding: var(--pmdr-space-sm) var(--pmdr-space-lg);
+  border: none;
+  border-radius: var(--pmdr-radius-full);
+  cursor: pointer;
+  color: var(--pmdr-clr-on-surface-text-muted);
+  background: transparent;
+  transition:
+    color var(--pmdr-transition-fast),
+    background-color var(--pmdr-transition-fast);
+}
+
+.mode-toggle-btn:hover:not(.active) {
+  color: var(--pmdr-clr-on-surface-text-secondary);
+}
+
+.mode-toggle-btn:focus-visible {
+  outline: var(--pmdr-focus-ring-width) solid var(--pmdr-clr-on-surface-interactive-focus-ring);
+  outline-offset: var(--pmdr-focus-ring-offset);
+}
+
+#mode-work-btn.active {
+  background-color: var(--pmdr-clr-on-surface-work);
+  color: #fff;
+}
+
+#mode-break-btn.active {
+  background-color: var(--pmdr-clr-on-surface-break);
+  color: #fff;
 }
 
 /* --- Time display ----------------------------------------------- */

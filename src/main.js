@@ -7,10 +7,11 @@ let currentMode = "work";
 let intervalId = null;
 
 const app = document.getElementById("app");
-const modeLabel = document.getElementById("mode-label");
 const timeDisplay = document.getElementById("time-display");
 const startPauseBtn = document.getElementById("start-pause-btn");
 const resetBtn = document.getElementById("reset-btn");
+const modeWorkBtn = document.getElementById("mode-work-btn");
+const modeBreakBtn = document.getElementById("mode-break-btn");
 const workDurationInput = document.getElementById("work-duration");
 const breakDurationInput = document.getElementById("break-duration");
 const settingsPanel = document.querySelector(".settings-panel");
@@ -48,7 +49,8 @@ function updateDisplay() {
   timeDisplay.textContent =
     String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
 
-  modeLabel.textContent = currentMode === "work" ? "Work" : "Break";
+  modeWorkBtn.classList.toggle("active", currentMode === "work");
+  modeBreakBtn.classList.toggle("active", currentMode === "break");
   app.dataset.mode = currentMode;
 }
 
@@ -138,8 +140,23 @@ function handleShortcut(e) {
   updateDisplay();
 }
 
+function switchMode(newMode) {
+  if (newMode === currentMode) return;
+  clearInterval(intervalId);
+  intervalId = null;
+  isRunning = false;
+  startPauseBtn.textContent = "Start";
+  lockSettings(false);
+  currentMode = newMode;
+  timeRemaining = currentMode === "work" ? workSeconds : breakSeconds;
+  updateDisplay();
+}
+
 settingsToggleBtn.addEventListener("click", () => settingsPanel.classList.toggle("open"));
 settingsFieldset.addEventListener("click", handleShortcut);
+
+modeWorkBtn.addEventListener("click", () => switchMode("work"));
+modeBreakBtn.addEventListener("click", () => switchMode("break"));
 
 startPauseBtn.addEventListener("click", startPause);
 resetBtn.addEventListener("click", reset);
