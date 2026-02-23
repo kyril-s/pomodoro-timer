@@ -326,12 +326,18 @@ body {
   margin-bottom: 0;
   transition:
     max-height 0.4s ease,
-    opacity 0.2s ease;
+    opacity 0.2s ease,
+    overflow 0s 0.4s;
 }
 
 .settings-panel.open .settings-fields {
   max-height: 30rem;
   opacity: 1;
+  overflow: visible;
+  transition:
+    max-height 0.4s ease,
+    opacity 0.2s ease,
+    overflow 0s 0s;
 }
 
 .settings-row {
@@ -339,6 +345,26 @@ body {
   align-items: center;
   flex-wrap: wrap;
   gap: var(--pmdr-space-sm) var(--pmdr-space-md);
+}
+
+.settings-section-label {
+  display: flex;
+  align-items: center;
+  gap: var(--pmdr-space-sm);
+  font-size: var(--pmdr-text-xs);
+  font-weight: var(--pmdr-weight-bold);
+  letter-spacing: var(--pmdr-tracking-wide);
+  text-transform: uppercase;
+  color: var(--pmdr-clr-on-surface-text-muted);
+  padding-top: var(--pmdr-space-xs);
+}
+
+.settings-section-label::after {
+  content: "";
+  flex: 1;
+  height: 2px;
+  background-color: var(--pmdr-clr-on-surface-text-muted);
+  opacity: 0.3;
 }
 
 .shortcuts-row {
@@ -660,5 +686,15 @@ body.flash-long-break { animation: flash-long-break 0.6s ease-out; }
 @keyframes schedule-pulse {
   0%, 100% { opacity: 1; }
   50%      { opacity: 0.4; }
+}
+
+/* =================================================================
+   Responsive: narrow screens
+   ================================================================= */
+
+@media (max-width: 400px) {
+  .mode-toggle {
+    flex-direction: column;
+  }
 }
 
