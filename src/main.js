@@ -199,6 +199,7 @@ function updateDisplay() {
   modeBreakBtn.classList.toggle("active", currentMode === "break");
   modeLongBreakBtn.classList.toggle("active", currentMode === "longBreak");
   app.dataset.mode = currentMode;
+  app.dataset.running = isRunning;
   applyTheme();
   renderSchedule();
 }

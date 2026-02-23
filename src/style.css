@@ -119,6 +119,8 @@ body {
   line-height: var(--pmdr-leading-normal);
   color: var(--pmdr-clr-on-surface-text);
   background-color: var(--pmdr-clr-surface-page);
+  display: flex;
+  flex-direction: column;
   min-height: 100dvh;
   transition: background-color 0.4s ease, color 0.4s ease;
 }
@@ -127,9 +129,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  min-height: 100dvh;
-  padding: var(--pmdr-space-md);
+  flex: 1;
+  padding: var(--pmdr-space-2xl) var(--pmdr-space-md) var(--pmdr-space-md);
 }
 
 /* =================================================================
@@ -224,6 +225,15 @@ body {
   line-height: var(--pmdr-leading-tight);
   color: var(--pmdr-clr-on-surface-text);
   font-variant-numeric: tabular-nums;
+  transition: color 0.3s ease;
+}
+
+[data-mode="break"][data-running="true"] .timer-display {
+  color: var(--pmdr-clr-on-surface-break);
+}
+
+[data-mode="longBreak"][data-running="true"] .timer-display {
+  color: var(--pmdr-clr-on-surface-long-break);
 }
 
 /* --- Controls --------------------------------------------------- */
@@ -694,23 +704,23 @@ body.flash-long-break { animation: flash-long-break 0.6s ease-out; }
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.schedule-item.active .schedule-item-dot {
+[data-running="true"] .schedule-item.active .schedule-item-dot {
   width: 8px;
   height: 8px;
   animation: schedule-pulse 2s ease-in-out infinite;
 }
 
-.schedule-item.active[data-sched-mode="work"] .schedule-item-dot {
+[data-running="true"] .schedule-item.active[data-sched-mode="work"] .schedule-item-dot {
   background-color: var(--pmdr-clr-on-surface-work);
   box-shadow: 0 0 6px var(--pmdr-clr-on-surface-work-glow);
 }
 
-.schedule-item.active[data-sched-mode="break"] .schedule-item-dot {
+[data-running="true"] .schedule-item.active[data-sched-mode="break"] .schedule-item-dot {
   background-color: var(--pmdr-clr-on-surface-break);
   box-shadow: 0 0 6px var(--pmdr-clr-on-surface-break-glow);
 }
 
-.schedule-item.active[data-sched-mode="longBreak"] .schedule-item-dot {
+[data-running="true"] .schedule-item.active[data-sched-mode="longBreak"] .schedule-item-dot {
   background-color: var(--pmdr-clr-on-surface-long-break);
   box-shadow: 0 0 6px var(--pmdr-clr-on-surface-long-break-glow);
 }
