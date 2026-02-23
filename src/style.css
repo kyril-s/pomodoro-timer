@@ -33,6 +33,10 @@
   /* --- Colors: interactive ---------------------------------------- */
   --pmdr-clr-on-surface-interactive-focus-ring:     light-dark(rgba(59, 130, 246, 0.5),rgba(99, 160, 255, 0.5));
 
+  /* --- Focus ring ------------------------------------------------- */
+  --pmdr-focus-ring-width:  3px;
+  --pmdr-focus-ring-offset: 2px;
+
   /* --- Spacing scale ---------------------------------------------- */
   --pmdr-space-xs:  0.25rem;
   --pmdr-space-sm:  0.5rem;
@@ -77,6 +81,9 @@
   /* --- Transitions ------------------------------------------------ */
   --pmdr-transition-fast: 150ms ease;
   --pmdr-transition-base: 250ms ease;
+
+  /* --- Opacity ---------------------------------------------------- */
+  --pmdr-opacity-disabled: 0.4;
 }
 
 /* Manual theme overrides — set data-theme on <html> to force a mode */
@@ -177,8 +184,8 @@ body {
 }
 
 .btn:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px var(--pmdr-clr-on-surface-interactive-focus-ring);
+  outline: var(--pmdr-focus-ring-width) solid var(--pmdr-clr-on-surface-interactive-focus-ring);
+  outline-offset: var(--pmdr-focus-ring-offset);
 }
 
 .btn-primary {
@@ -201,6 +208,151 @@ body {
   border-color: var(--pmdr-clr-on-surface-text-secondary);
   color: var(--pmdr-clr-on-surface-text);
 }
+
+/* =================================================================
+   Settings Panel (top expandable bar)
+   ================================================================= */
+
+.settings-panel {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  background-color: var(--pmdr-clr-surface-card);
+}
+
+.settings-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--pmdr-space-md) var(--pmdr-space-lg);
+}
+
+.settings-fields {
+  display: flex;
+  align-items: center;
+  gap: var(--pmdr-space-lg);
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+
+  border: none;
+  padding: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  transition:
+    max-height 0.3s ease,
+    opacity 0.2s ease;
+}
+
+.settings-panel.open .settings-fields {
+  max-height: 3rem;
+  opacity: 1;
+}
+
+.settings-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: none;
+  border-radius: var(--pmdr-radius-sm);
+  background: transparent;
+  cursor: pointer;
+  color: var(--pmdr-clr-on-surface-text-secondary);
+  transition:
+    color var(--pmdr-transition-fast),
+    background-color var(--pmdr-transition-fast);
+}
+
+.settings-toggle:hover {
+  color: var(--pmdr-clr-on-surface-text);
+  background-color: var(--pmdr-clr-surface-raised);
+}
+
+.settings-toggle:focus-visible {
+  outline: var(--pmdr-focus-ring-width) solid var(--pmdr-clr-on-surface-interactive-focus-ring);
+  outline-offset: var(--pmdr-focus-ring-offset);
+}
+
+.settings-icon {
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.settings-panel.open .settings-icon {
+  transform: rotate(45deg);
+}
+
+.settings-field {
+  display: flex;
+  align-items: center;
+  gap: var(--pmdr-space-sm);
+}
+
+.settings-label {
+  font-size: var(--pmdr-text-sm);
+  font-weight: var(--pmdr-weight-medium);
+  color: var(--pmdr-clr-on-surface-text-secondary);
+}
+
+.settings-input-group {
+  display: flex;
+  align-items: center;
+  gap: var(--pmdr-space-xs);
+}
+
+.settings-input {
+  width: 3.5rem;
+  padding: var(--pmdr-space-xs) var(--pmdr-space-sm);
+  font-family: var(--pmdr-font-mono);
+  font-size: var(--pmdr-text-sm);
+  font-weight: var(--pmdr-weight-medium);
+  color: var(--pmdr-clr-on-surface-text);
+  background-color: var(--pmdr-clr-surface-raised);
+  border: 2px solid var(--pmdr-clr-on-surface-text-muted);
+  border-radius: var(--pmdr-radius-sm);
+  text-align: center;
+  transition: border-color var(--pmdr-transition-fast);
+}
+
+.settings-input:focus-visible {
+  border-color: var(--pmdr-clr-on-surface-work);
+  outline: var(--pmdr-focus-ring-width) solid var(--pmdr-clr-on-surface-interactive-focus-ring);
+  outline-offset: var(--pmdr-focus-ring-offset);
+}
+
+.settings-unit {
+  font-size: var(--pmdr-text-xs);
+  color: var(--pmdr-clr-on-surface-text-muted);
+}
+
+.settings-panel.open .settings-fields:disabled {
+  opacity: var(--pmdr-opacity-disabled);
+  cursor: not-allowed;
+}
+
+.settings-panel.open .settings-fields:disabled * {
+  cursor: not-allowed;
+}
+
+/* =================================================================
+   Mode-Switch Flash Animation
+   ================================================================= */
+
+@keyframes flash-work {
+  0%   { background-color: var(--pmdr-clr-on-surface-work); }
+  100% { background-color: var(--pmdr-clr-surface-page); }
+}
+
+@keyframes flash-break {
+  0%   { background-color: var(--pmdr-clr-on-surface-break); }
+  100% { background-color: var(--pmdr-clr-surface-page); }
+}
+
+body.flash-work  { animation: flash-work 0.6s ease-out; }
+body.flash-break { animation: flash-break 0.6s ease-out; }
 
 /* =================================================================
    Break-Mode Overrides
