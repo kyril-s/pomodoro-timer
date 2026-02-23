@@ -74,10 +74,24 @@
   --pmdr-tracking-wide:    0.05em;
 
   /* --- Border radius ---------------------------------------------- */
-  --pmdr-radius-sm:   0.375rem;
-  --pmdr-radius-md:   0.75rem;
-  --pmdr-radius-lg:   1rem;
-  --pmdr-radius-full: 9999px;
+  --pmdr-radius-sm:   2px;
+  --pmdr-radius-md:   4px;
+  --pmdr-radius-lg:   6px;
+  --pmdr-radius-full: 4px;
+
+  /* --- Card shadows ----------------------------------------------- */
+  --pmdr-shadow-card:      8px 8px 0 #b0b1c0;
+
+  /* --- Button shadows -------------------------------------------- */
+  --pmdr-shadow-btn:        3px 3px 0 #b0b1c0;
+  --pmdr-shadow-btn-hover:  5px 5px 0 #b0b1c0;
+  --pmdr-shadow-btn-press:  1px 1px 0 #b0b1c0;
+
+  /* --- Small element shadows ------------------------------------- */
+  --pmdr-shadow-hard-sm:    2px 2px 0 #b0b1c0;
+
+  /* --- Brutalist border ------------------------------------------ */
+  --pmdr-border-thick: 2px solid var(--pmdr-clr-on-surface-text);
 
   /* --- Transitions ------------------------------------------------ */
   --pmdr-transition-fast: 150ms ease;
@@ -132,7 +146,9 @@ body {
   background-color: var(--pmdr-clr-surface-card);
   padding: var(--pmdr-space-lg) var(--pmdr-space-lg);
   border-radius: var(--pmdr-radius-lg);
-  transition: background-color 0.4s ease;
+  border: var(--pmdr-border-thick);
+  box-shadow: var(--pmdr-shadow-card);
+  transition: background-color 0.4s ease, box-shadow var(--pmdr-transition-fast);
 }
 
 /* --- Mode toggle ----------------------------------------------- */
@@ -141,27 +157,29 @@ body {
   display: flex;
   width: 100%;
   background-color: var(--pmdr-clr-surface-raised);
-  border-radius: var(--pmdr-radius-full);
+  border-radius: var(--pmdr-radius-md);
+  border: var(--pmdr-border-thick);
   padding: var(--pmdr-space-xs);
 }
 
 .mode-toggle-btn {
   font-family: inherit;
   font-size: var(--pmdr-text-xs);
-  font-weight: var(--pmdr-weight-semibold);
+  font-weight: var(--pmdr-weight-bold);
   letter-spacing: var(--pmdr-tracking-wide);
   text-transform: uppercase;
   line-height: 1;
   width: 100%;
   padding: var(--pmdr-space-sm) var(--pmdr-space-lg);
   border: none;
-  border-radius: var(--pmdr-radius-full);
+  border-radius: var(--pmdr-radius-sm);
   cursor: pointer;
   color: var(--pmdr-clr-on-surface-text-muted);
   background: transparent;
   transition:
     color var(--pmdr-transition-fast),
-    background-color var(--pmdr-transition-fast);
+    background-color var(--pmdr-transition-fast),
+    box-shadow var(--pmdr-transition-fast);
 }
 
 .mode-toggle-btn:hover:not(.active) {
@@ -222,17 +240,30 @@ body {
 .btn {
   font-family: inherit;
   font-size: var(--pmdr-text-base);
-  font-weight: var(--pmdr-weight-semibold);
+  font-weight: var(--pmdr-weight-bold);
   letter-spacing: var(--pmdr-tracking-wide);
+  text-transform: uppercase;
   line-height: 1;
   padding: var(--pmdr-space-sm) var(--pmdr-space-xl);
-  border: 2px solid transparent;
-  border-radius: var(--pmdr-radius-full);
+  border: var(--pmdr-border-thick);
+  border-radius: var(--pmdr-radius-md);
   cursor: pointer;
+  box-shadow: var(--pmdr-shadow-btn);
   transition:
     background-color var(--pmdr-transition-fast),
     border-color var(--pmdr-transition-fast),
-    box-shadow var(--pmdr-transition-fast);
+    box-shadow var(--pmdr-transition-fast),
+    transform var(--pmdr-transition-fast);
+}
+
+.btn:hover {
+  box-shadow: var(--pmdr-shadow-btn-hover);
+  transform: translate(-1px, -1px);
+}
+
+.btn:active {
+  box-shadow: var(--pmdr-shadow-btn-press);
+  transform: translate(1px, 1px);
 }
 
 .btn:focus-visible {
@@ -243,21 +274,18 @@ body {
 .btn-primary {
   background-color: var(--pmdr-clr-action-primary);
   color: var(--pmdr-clr-action-primary-text);
-  border-color: var(--pmdr-clr-action-primary);
 }
 
 .btn-primary:hover {
-  opacity: 0.85;
+  background-color: var(--pmdr-clr-action-primary);
 }
 
 .btn-secondary {
-  background-color: transparent;
+  background-color: var(--pmdr-clr-surface-card);
   color: var(--pmdr-clr-on-surface-text-secondary);
-  border-color: var(--pmdr-clr-on-surface-text-muted);
 }
 
 .btn-secondary:hover {
-  border-color: var(--pmdr-clr-on-surface-text-secondary);
   color: var(--pmdr-clr-on-surface-text);
 }
 
@@ -270,6 +298,7 @@ body {
   top: 0;
   width: 100%;
   background-color: var(--pmdr-clr-surface-card);
+  border-bottom: var(--pmdr-border-thick);
   transition: background-color 0.4s ease;
 }
 
@@ -325,13 +354,13 @@ body {
 .btn-shortcut {
   font-family: var(--pmdr-font-mono);
   font-size: var(--pmdr-text-xs);
-  font-weight: var(--pmdr-weight-medium);
+  font-weight: var(--pmdr-weight-bold);
   line-height: 1;
   padding: var(--pmdr-space-xs) var(--pmdr-space-sm);
   color: var(--pmdr-clr-on-surface-text-secondary);
   background-color: var(--pmdr-clr-surface-raised);
-  border: 1px solid var(--pmdr-clr-on-surface-text-muted);
-  border-radius: var(--pmdr-radius-full);
+  border: 2px solid var(--pmdr-clr-on-surface-text);
+  border-radius: var(--pmdr-radius-sm);
   cursor: pointer;
   transition:
     background-color var(--pmdr-transition-fast),
@@ -341,7 +370,7 @@ body {
 
 .btn-shortcut:hover {
   color: var(--pmdr-clr-on-surface-text);
-  border-color: var(--pmdr-clr-on-surface-text-secondary);
+  border-color: var(--pmdr-clr-on-surface-text);
 }
 
 .btn-shortcut[data-target="work"]:hover {
@@ -371,19 +400,29 @@ body {
   flex-shrink: 0;
   width: 2.25rem;
   height: 2.25rem;
-  border: none;
+  border: var(--pmdr-border-thick);
   border-radius: var(--pmdr-radius-sm);
-  background: transparent;
+  background: var(--pmdr-clr-surface-raised);
+  box-shadow: var(--pmdr-shadow-btn);
   cursor: pointer;
   color: var(--pmdr-clr-on-surface-text-secondary);
   transition:
     color var(--pmdr-transition-fast),
-    background-color var(--pmdr-transition-fast);
+    background-color var(--pmdr-transition-fast),
+    box-shadow var(--pmdr-transition-fast),
+    transform var(--pmdr-transition-fast);
 }
 
 .settings-toggle:hover {
   color: var(--pmdr-clr-on-surface-text);
   background-color: var(--pmdr-clr-surface-raised);
+  transform: translate(-1px, -1px);
+  box-shadow: var(--pmdr-shadow-btn-hover);
+}
+
+.settings-toggle:active {
+  transform: translate(1px, 1px);
+  box-shadow: var(--pmdr-shadow-btn-press);
 }
 
 .settings-toggle:focus-visible {
@@ -423,10 +462,10 @@ body {
   padding: var(--pmdr-space-xs) var(--pmdr-space-sm);
   font-family: var(--pmdr-font-mono);
   font-size: var(--pmdr-text-sm);
-  font-weight: var(--pmdr-weight-medium);
+  font-weight: var(--pmdr-weight-bold);
   color: var(--pmdr-clr-on-surface-text);
   background-color: var(--pmdr-clr-surface-raised);
-  border: 2px solid var(--pmdr-clr-on-surface-text-muted);
+  border: var(--pmdr-border-thick);
   border-radius: var(--pmdr-radius-sm);
   text-align: center;
   transition: border-color var(--pmdr-transition-fast);
@@ -452,7 +491,8 @@ body {
   appearance: none;
   flex: 1;
   height: 0.5rem;
-  border-radius: var(--pmdr-radius-full);
+  border-radius: var(--pmdr-radius-sm);
+  border: 2px solid var(--pmdr-clr-on-surface-text);
   background: linear-gradient(to right,
     hsl(0   100% 50%),
     hsl(60  100% 50%),
@@ -471,10 +511,10 @@ body {
   appearance: none;
   width: 1.125rem;
   height: 1.125rem;
-  border-radius: var(--pmdr-radius-full);
+  border-radius: var(--pmdr-radius-sm);
   background: #fff;
-  border: 2px solid var(--pmdr-clr-on-surface-text-muted);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  border: 2px solid var(--pmdr-clr-on-surface-text);
+  box-shadow: var(--pmdr-shadow-hard-sm);
   transition: border-color var(--pmdr-transition-fast),
               box-shadow var(--pmdr-transition-fast);
 }
@@ -482,10 +522,10 @@ body {
 .settings-hue-slider::-moz-range-thumb {
   width: 1.125rem;
   height: 1.125rem;
-  border-radius: var(--pmdr-radius-full);
+  border-radius: var(--pmdr-radius-sm);
   background: #fff;
-  border: 2px solid var(--pmdr-clr-on-surface-text-muted);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  border: 2px solid var(--pmdr-clr-on-surface-text);
+  box-shadow: var(--pmdr-shadow-hard-sm);
   transition: border-color var(--pmdr-transition-fast),
               box-shadow var(--pmdr-transition-fast);
 }
@@ -580,7 +620,7 @@ body.flash-long-break { animation: flash-long-break 0.6s ease-out; }
   flex-shrink: 0;
   width: 6px;
   height: 6px;
-  border-radius: var(--pmdr-radius-full);
+  border-radius: 1px;
   background-color: var(--pmdr-clr-on-surface-text-muted);
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
