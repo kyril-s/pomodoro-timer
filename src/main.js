@@ -9,7 +9,7 @@ let isRunning = false;
 let currentMode = "work";
 let intervalId = null;
 let audioCtx;
-let currentHue = 239;
+let currentHue = 330;
 
 const app = document.getElementById("app");
 const timeDisplay = document.getElementById("time-display");
@@ -26,6 +26,7 @@ const settingsPanel = document.querySelector(".settings-panel");
 const settingsToggleBtn = document.getElementById("settings-toggle-btn");
 const settingsFieldset = document.getElementById("settings-fieldset");
 const themeHueInput = document.getElementById("theme-hue");
+const scheduleEl = document.getElementById("schedule");
 
 /* ---- Dynamic color system ---------------------------------------- */
 
@@ -44,6 +45,8 @@ function applyColors(isDark) {
   const workS = 65;
   const breakH = (h + 150) % 360;
   const breakS = 55;
+  const longH = (h + 80) % 360;
+  const longS = 60;
 
   if (isDark) {
     root.setProperty("--pmdr-clr-surface-page", hsl(h, 30, 6));
@@ -61,6 +64,10 @@ function applyColors(isDark) {
     root.setProperty("--pmdr-clr-on-surface-break", hsl(breakH, breakS, 68));
     root.setProperty("--pmdr-clr-on-surface-break-dim", hsl(breakH, 30, 14));
     root.setProperty("--pmdr-clr-on-surface-break-glow", hsla(breakH, breakS, 68, 0.25));
+
+    root.setProperty("--pmdr-clr-on-surface-long-break", hsl(longH, longS, 68));
+    root.setProperty("--pmdr-clr-on-surface-long-break-dim", hsl(longH, 30, 14));
+    root.setProperty("--pmdr-clr-on-surface-long-break-glow", hsla(longH, longS, 68, 0.25));
 
     root.setProperty("--pmdr-clr-action-primary", "#f0f0f0");
     root.setProperty("--pmdr-clr-action-primary-text", "#111111");
@@ -82,6 +89,10 @@ function applyColors(isDark) {
     root.setProperty("--pmdr-clr-on-surface-break", hsl(breakH, breakS, 35));
     root.setProperty("--pmdr-clr-on-surface-break-dim", hsl(breakH, 35, 95));
     root.setProperty("--pmdr-clr-on-surface-break-glow", hsla(breakH, breakS, 35, 0.15));
+
+    root.setProperty("--pmdr-clr-on-surface-long-break", hsl(longH, longS, 38));
+    root.setProperty("--pmdr-clr-on-surface-long-break-dim", hsl(longH, 35, 95));
+    root.setProperty("--pmdr-clr-on-surface-long-break-glow", hsla(longH, longS, 38, 0.15));
 
     root.setProperty("--pmdr-clr-action-primary", "#1a1a1a");
     root.setProperty("--pmdr-clr-action-primary-text", "#ffffff");
@@ -129,6 +140,54 @@ function secondsForMode(mode) {
   return breakSeconds;
 }
 
+function formatMin(secs) {
+  return Math.ceil(secs / 60) + "m";
+}
+
+function modeLabel(mode) {
+  if (mode === "work") return "Work";
+  if (mode === "longBreak") return "Long Break";
+  return "Break";
+}
+
+function buildSchedule() {
+  const steps = [];
+  const totalItems = 8;
+  let simWork = completedWorkSessions;
+  let simMode = currentMode;
+
+  steps.push({ mode: simMode, seconds: secondsForMode(simMode) });
+
+  while (steps.length < totalItems) {
+    if (simMode === "work") {
+      simWork++;
+      const useLong =
+        longBreakInterval > 0 && simWork % longBreakInterval === 0;
+      simMode = useLong ? "longBreak" : "break";
+    } else {
+      simMode = "work";
+    }
+    steps.push({ mode: simMode, seconds: secondsForMode(simMode) });
+  }
+
+  return steps;
+}
+
+function renderSchedule() {
+  const steps = buildSchedule();
+
+  scheduleEl.innerHTML = steps
+    .map((step, i) => {
+      const cls = i === 0 ? "active" : "";
+      return `<div class="schedule-item ${cls}" data-sched-mode="${step.mode}">
+        <span class="schedule-item-dot"></span>
+        <span class="schedule-item-label">${modeLabel(step.mode)}</span>
+        <span class="schedule-item-duration">${formatMin(step.seconds)}</span>
+      </div>`;
+    })
+    .join("");
+}
+
 function updateDisplay() {
   const minutes = Math.floor(timeRemaining / 60);
   const seconds = timeRemaining % 60;
@@ -140,6 +199,7 @@ function updateDisplay() {
   modeLongBreakBtn.classList.toggle("active", currentMode === "longBreak");
   app.dataset.mode = currentMode;
   applyTheme();
+  renderSchedule();
 }
 
 function tick() {
@@ -162,8 +222,9 @@ function tick() {
 
     playNotification(wasWork ? 880 : 660, wasWork ? 3 : 2);
 
-    const flashClass = wasWork ? "flash-break" : "flash-work";
-    document.body.classList.remove("flash-work", "flash-break");
+    const flashMap = { work: "flash-work", break: "flash-break", longBreak: "flash-long-break" };
+    const flashClass = flashMap[currentMode];
+    document.body.classList.remove("flash-work", "flash-break", "flash-long-break");
     void document.body.offsetWidth;
     document.body.classList.add(flashClass);
   }
@@ -263,7 +324,7 @@ function handleShortcut(e) {
 /* ---- Event listeners ---------------------------------------------- */
 
 document.body.addEventListener("animationend", () => {
-  document.body.classList.remove("flash-work", "flash-break");
+  document.body.classList.remove("flash-work", "flash-break", "flash-long-break");
 });
 
 settingsToggleBtn.addEventListener("click", () => settingsPanel.classList.toggle("open"));
