@@ -87,15 +87,19 @@
 
     <div id="app">
         <div class="timer-card">
-            <div class="mode-toggle">
-                <button id="mode-work-btn" type="button" class="mode-toggle-btn active">Work</button>
-                <button id="mode-break-btn" type="button" class="mode-toggle-btn">Break</button>
-                <button id="mode-long-break-btn" type="button" class="mode-toggle-btn">Long Break</button>
+            <div class="mode-toggle-wrap">
+                <kbd class="kbd-hint mode-toggle-hint">[</kbd>
+                <div class="mode-toggle">
+                    <button id="mode-work-btn" type="button" class="mode-toggle-btn active">Work</button>
+                    <button id="mode-break-btn" type="button" class="mode-toggle-btn">Break</button>
+                    <button id="mode-long-break-btn" type="button" class="mode-toggle-btn">Long Break</button>
+                </div>
+                <kbd class="kbd-hint mode-toggle-hint">]</kbd>
             </div>
             <p id="time-display" class="timer-display">25:00</p>
             <div class="timer-controls">
-                <button id="start-pause-btn" class="btn btn-primary">Start</button>
-                <button id="reset-btn" class="btn btn-secondary">Reset</button>
+                <button id="start-pause-btn" class="btn btn-primary"><span class="btn-label">Start</span><kbd class="kbd-hint">Space</kbd></button>
+                <button id="reset-btn" class="btn btn-secondary"><span class="btn-label">Reset</span><kbd class="kbd-hint">R</kbd></button>
             </div>
         </div>
         <div id="schedule" class="schedule"></div>

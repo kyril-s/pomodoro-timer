@@ -14,6 +14,7 @@ let currentHue = 330;
 const app = document.getElementById("app");
 const timeDisplay = document.getElementById("time-display");
 const startPauseBtn = document.getElementById("start-pause-btn");
+const startPauseLabel = startPauseBtn.querySelector(".btn-label");
 const resetBtn = document.getElementById("reset-btn");
 const modeWorkBtn = document.getElementById("mode-work-btn");
 const modeBreakBtn = document.getElementById("mode-break-btn");
@@ -238,7 +239,7 @@ function stopTimer() {
   clearInterval(intervalId);
   intervalId = null;
   isRunning = false;
-  startPauseBtn.textContent = "Start";
+  startPauseLabel.textContent = "Start";
   settingsFieldset.disabled = false;
   settingsFieldset.title = "";
 }
@@ -249,7 +250,7 @@ function startPause() {
   } else {
     intervalId = setInterval(tick, 1000);
     isRunning = true;
-    startPauseBtn.textContent = "Pause";
+    startPauseLabel.textContent = "Pause";
     settingsFieldset.disabled = true;
     settingsFieldset.title = "Pause the timer to edit";
   }
@@ -320,6 +321,40 @@ function handleShortcut(e) {
 
   updateDisplay();
 }
+
+/* ---- Keyboard shortcuts ------------------------------------------- */
+
+const modes = ["work", "break", "longBreak"];
+
+function switchModeForward() {
+  const idx = modes.indexOf(currentMode);
+  switchMode(modes[(idx + 1) % modes.length]);
+}
+
+function switchModeBackward() {
+  const idx = modes.indexOf(currentMode);
+  switchMode(modes[(idx - 1 + modes.length) % modes.length]);
+}
+
+document.addEventListener("keydown", (e) => {
+  if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+
+  switch (e.code) {
+    case "Space":
+      e.preventDefault();
+      startPause();
+      break;
+    case "KeyR":
+      reset();
+      break;
+    case "BracketRight":
+      switchModeForward();
+      break;
+    case "BracketLeft":
+      switchModeBackward();
+      break;
+  }
+});
 
 /* ---- Event listeners ---------------------------------------------- */
 
